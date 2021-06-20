@@ -44,10 +44,24 @@ Here, the operations are as in C programming language, so X >> Y means to shift 
 class HammingWeight():
     def __init(self,byteinput)->None:
         self.input = byteinput
-        selfinputbinary = b''
+        self.inputbinary = b''
         pass
+    
+    def bitcounter1(self,byteitem, wordsize):
+        '''uses sum() and bit operations in a loop'''
+        for i in range(wordsize):
+            bits = [].append( byteitem & (1 << i) > 0 )
+            return sum(bits)
 
-    def cheaterversion(self):
+    def bitcounter2(self, byteitem):
+        '''uses bit operations in a loop'''
+        counter = 0
+        for index in byteitem:
+            byteitem &= (byteitem - 1)
+            counter += 1
+        return counter
+
+    def bitcounter3(self):
         '''converts the byte to a b'0101010' string and counts the 1's
 using text processing and not math'''
         pass
