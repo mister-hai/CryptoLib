@@ -40,6 +40,7 @@ these operations can be done:
 
 Here, the operations are as in C programming language, so X >> Y means to shift X right by Y bits, X & Y means the bitwise AND of X and Y, and + is ordinary addition. The best algorithms known for this problem are based on the concept illustrated above and are given here:[1] 
 '''
+from typing import List
 
 class HammingWeight():
     def __init(self,byteinput)->None:
@@ -65,3 +66,22 @@ class HammingWeight():
         '''converts the byte to a b'0101010' string and counts the 1's
 using text processing and not math'''
         pass
+    
+    def bitcounter4(self, arr: List[int]) -> List[int]:
+        return sorted(arr, key=lambda x: (bin(x).count("1"), x))
+
+    def bitcounter5(self,byteitem):
+        '''Based off wikipedia as documentation'''
+        m1  = 0x5555555555555555 #binary: 0101...
+        m2  = 0x3333333333333333 #binary: 00110011..
+        m4  = 0x0f0f0f0f0f0f0f0f #binary:  4 zeros,  4 ones ...
+        m8  = 0x00ff00ff00ff00ff #binary:  8 zeros,  8 ones ...
+        m16 = 0x0000ffff0000ffff #binary: 16 zeros, 16 ones ...
+        m32 = 0x00000000ffffffff #binary: 32 zeros, 32 ones
+        h01 = 0x0101010101010101 #the sum of 256 to the power of 0,1,2,3...
+        
+        #def hammingWeight(self, byteitem: int) -> int:
+        byteitem -= (byteitem>>1)&m1
+        byteitem = (byteitem&m2) + ((byteitem>>2)&m2)
+        byteitem = (byteitem+(byteitem>>4))&m4
+        return ((byteitem*h01)>>56)&0x7f

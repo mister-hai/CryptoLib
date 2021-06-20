@@ -146,8 +146,8 @@ class OneWayCompression():
             output.append([datainput[0:chunksize:slicestepsize]])
         pass
 
-    def squish(self, feedandseed:bytes ):
-        '''feedandseed:bytes sahould be a stream of random bytes, 
+    def squish(self, feedandseed:bytes,chunksize,slicestepsize = 1 ):
+        '''feedandseed:bytes should be a stream of random bytes, 
         it will be chunked, you do not need to chunk it yourself'''
         for index1,index2 in range(self.inputlen1),range(self.inputlen2):
             #XORBox maybe?
