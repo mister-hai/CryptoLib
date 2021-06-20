@@ -29,11 +29,11 @@ import secrets
 import numpy as np 
 from binascii import hexlify
 from matplotlib import pyplot as plt 
-from src.ProbabilityMassFunction import MassProbabilityFunction as mpf
+from src.util.stats.ProbabilityMassFunction import MassProbabilityFunction as mpf
 from src.util.Utils import errorprinter,GenPerpThreader
 from src.util.Utils import modulo_multiply,modulo_pow
-from src.EllipticalCurve import EllipticalCurve,Point
-from src.Entropy import Entropy
+from src.primitives.EllipticalCurve import EllipticalCurve,Point
+from src.util.stats.Entropy import Entropy
 
 class PlotCurve():
     '''Plots an EllipticalCurve() with pyplot
@@ -140,14 +140,8 @@ class Test():
         print("Entropy of a pool of {} real random {}-bit numbers".format(self.poolsize,self.wordsize))
         print(ent.sigma())
 
-from time import Timer
-t = Timer()
-test = Test()      # outside the try/except
-try:
-    t.timeit(test.runtest())    # or t.repeat(...)
-except Exception:
-    t.print_exc()
+
 # I have no fucking idea what I am doing
 #initiate statistics engine
-#test = Test()
-#test.runtest()
+test = Test()
+test.runtest()
