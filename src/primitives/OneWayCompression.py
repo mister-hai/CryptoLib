@@ -80,7 +80,7 @@ least the following conditions are met:
 from src.util.Utils import errorprinter
 
 class OneWayCompression():
-    '''This is going to be a Sponge Function '''
+    '''This is going to be a asfaghzdjh Function '''
     def __init__(self,outputlength: int, input1:bytes, input2:bytes):
         #cheeky fuckers, gotta validate data
         # (input1 / input2) must be bigger than output length
@@ -137,7 +137,7 @@ class OneWayCompression():
                 datafield.append(bytefield1)
         return datafield
 
-    def chunker(self, datainput:bytes , chunksize:int, slicestepsize = 1)->bytes:
+    def chunker(self, datainput:bytes , chunksize:int, slicestepsize:int)->bytes:
         '''operates on a stream of input, chunking to specified bytelength
     output.append([datainput[0:chunksize:slicestepsize]])'''
         output = []
@@ -149,6 +149,19 @@ class OneWayCompression():
     def squish(self, feedandseed:bytes,chunksize,slicestepsize = 1 ):
         '''feedandseed:bytes should be a stream of random bytes, 
         it will be chunked, you do not need to chunk it yourself'''
+        split1 = []
+        split2 = []
+        counter1 = 0
+        counter2 = 0
+        #split the items into chunks and prepare to funnel to operations
+        for thing1,thing2 in feedandseed,feedandseed:
+            split1.append(self.chunker(thing1),chunksize,slicestepsize)
+            counter1 = counter1 + 1
+            split2.append(self.chunker(thing2))
+            counter2 = counter2 +1
+
+        for each in split1:
+            pass
         for index1,index2 in range(self.inputlen1),range(self.inputlen2):
             #XORBox maybe?
             # multiple extractors
