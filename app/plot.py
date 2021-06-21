@@ -9,15 +9,16 @@ import secrets
 import numpy as np 
 from flask import Flask
 from binascii import hexlify
-from matplotlib import pyplot as plt 
+from matplotlib import pyplot as plt
+
 ###############################################################################
 #                              Local Imports
 ###############################################################################
-from src.util.stats.ProbabilityMassFunction import MassProbabilityFunction as mpf
-from src.util.Utils import errorprinter,GenPerpThreader
-from src.util.Utils import modulo_multiply,modulo_pow
-from src.primitives.EllipticalCurve import EllipticalCurve,Point
-from src.util.stats.Entropy import Entropy
+from app.src.util.stats.ProbabilityMassFunction import MassProbabilityFunction as mpf
+from app.util.Utils import errorprinter,GenPerpThreader
+from app.src.util.Utils import modulo_multiply,modulo_pow
+from app.src.primitives.EllipticalCurve import EllipticalCurve,Point
+from app.src.util.stats.Entropy import Entropy
 
 ###############################################################################
 #                       Plotting Elliptical Curves

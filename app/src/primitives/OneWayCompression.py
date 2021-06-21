@@ -78,8 +78,8 @@ least the following conditions are met:
 
 '''
 import hashlib
-from src.util.Utils import errorprinter
-from src.tools.BlockChunker import Chunker
+from app.src.util.Utils import errorprinter
+from app.src.tools.BlockChunker import Chunker
 
 class OneWayCompression():
     '''This is going to be a asfaghzdjh Function '''

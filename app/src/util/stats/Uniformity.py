@@ -24,6 +24,7 @@ __url__ = '''
 '''
 __docs__ = '''
 '''
+import numpy
 
 class UniformityCheck():
     def __init__(self):

@@ -3,19 +3,13 @@
 ###############################################################################
 import math
 import numpy
-import hashlib
-import secrets
-import numpy as np 
-from binascii import hexlify
 from matplotlib import pyplot as plt 
 ###############################################################################
 #                              Local Imports
 ###############################################################################
-from src.util.stats.ProbabilityMassFunction import MassProbabilityFunction as mpf
-from src.util.Utils import errorprinter,GenPerpThreader
-from src.util.Utils import modulo_multiply,modulo_pow,randombytepool
-from src.primitives.EllipticalCurve import EllipticalCurve,Point
-from src.util.stats.Entropy import Entropy
+from app.src.util.Utils import modulo_multiply,modulo_pow,randombytepool
+from app.src.primitives.EllipticalCurve import EllipticalCurve,Point
+from app.src.util.stats.Entropy import Entropy
 
 ###############################################################################
 #                            Testing / Statistics
@@ -36,7 +30,7 @@ class Test():
 
         q.name = "2P"
         e.plot_points([p, q])
-        print(modulo_multiply(26, 19, 37))
+        return (modulo_multiply(26, 19, 37))
 
     def runtest(self):
         print("[+] Initiating Test of the Entropy() Class")

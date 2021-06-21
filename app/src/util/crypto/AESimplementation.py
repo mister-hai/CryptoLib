@@ -150,22 +150,22 @@ class AES(object):
         self.KeyDecRound = [[0] * 4 for i in xrange(rounds + 1)]
 
         round_key_count = (rounds + 1) * 4
-        KC = len(key) // 4
+        KeyCounter = len(key) // 4
 
         # Convert the key into ints
         tk = [ struct.unpack('>i', key[i:i + 4])[0] for i in xrange(0, len(key), 4) ]
 
         # Copy values into round key arrays
-        for i in xrange(0, KC):
+        for i in xrange(0, KeyCounter):
             self.KeyEncRound[i // 4][i % 4] = tk[i]
             self.KeyDecRound[rounds - (i // 4)][i % 4] = tk[i]
 
         # Key expansion (fips-197 section 5.2)
         rconpointer = 0
-        t = KC
+        t = KeyCounter
         while t < round_key_count:
 
-            tt = tk[KC - 1]
+            tt = tk[KeyCounter - 1]
             tk[0] ^= ((self.S[(tt >> 16) & 0xFF] << 24) ^
                       (self.S[(tt >>  8) & 0xFF] << 16) ^
                       (self.S[ tt        & 0xFF] <<  8) ^
@@ -173,27 +173,27 @@ class AES(object):
                       (self.rcon[rconpointer] << 24))
             rconpointer += 1
 
-            if KC != 8:
-                for i in xrange(1, KC):
+            if KeyCounter != 8:
+                for i in xrange(1, KeyCounter):
                     tk[i] ^= tk[i - 1]
 
             # Key expansion for 256-bit keys is "slightly different" (fips-197)
             else:
-                for i in xrange(1, KC // 2):
+                for i in xrange(1, KeyCounter // 2):
                     tk[i] ^= tk[i - 1]
-                tt = tk[KC // 2 - 1]
+                tt = tk[KeyCounter // 2 - 1]
 
-                tk[KC // 2] ^= (self.S[ tt        & 0xFF]        ^
+                tk[KeyCounter // 2] ^= (self.S[ tt        & 0xFF]        ^
                                (self.S[(tt >>  8) & 0xFF] <<  8) ^
                                (self.S[(tt >> 16) & 0xFF] << 16) ^
                                (self.S[(tt >> 24) & 0xFF] << 24))
 
-                for i in xrange(KC // 2 + 1, KC):
+                for i in xrange(KeyCounter // 2 + 1, KeyCounter):
                     tk[i] ^= tk[i - 1]
 
             # Copy values into round key arrays
             j = 0
-            while j < KC and t < round_key_count:
+            while j < KeyCounter and t < round_key_count:
                 self.KeyEncRound[t // 4][t % 4] = tk[j]
                 self.KeyDecRound[rounds - (t // 4)][t % 4] = tk[j]
                 j += 1

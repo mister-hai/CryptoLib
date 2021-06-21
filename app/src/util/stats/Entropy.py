@@ -93,8 +93,8 @@ In Python3: 2**(int(math.log2(2048))*12) == int(2**132)
 import math
 import numpy
 import numpy as np 
-from src.util.stats.ProbabilityMassFunction import MassProbabilityFunction as mpf
-from src.util.Utils import errorprinter
+from app.src.util.stats.ProbabilityMassFunction import MassProbabilityFunction as mpf
+from app.src.util.Utils import errorprinter
 
 class Entropy():
     '''Calculates Entropy of a provided set'''
