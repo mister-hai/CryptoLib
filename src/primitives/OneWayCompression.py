@@ -146,7 +146,7 @@ class OneWayCompression():
             output.append([datainput[0:chunksize:slicestepsize]])
         return output
 
-    def squish(self,bytefeed:bytes,chunksize:int,slicestepsize = 1):#, wordsize = 32 ):
+    def squish(self,bytefeed:bytes,chunksze:int,slicestep = 1):#, wordsize = 32 ):
         '''feedandseed:bytes should be a stream of random bytes'''
         split1 = []
         split2 = []
@@ -154,9 +154,9 @@ class OneWayCompression():
         counter2 = 0
         #split the input streams into chunks and prepare to funnel to operations
         for thing1,thing2 in bytefeed,bytefeed:
-            split1.append(self.chunker(thing1),chunksize,slicestepsize)
+            split1.append(self.chunker(thing1,chunksze,slicestep))
             counter1 = counter1 + 1
-            split2.append(self.chunker(thing2))
+            split2.append(self.chunker(thing2,chunksze,slicestep))
             counter2 = counter2 +1
         #######################################################################
         # Pipeline 1, left side

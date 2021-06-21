@@ -21,20 +21,106 @@
 __credits__ = {"credit1":"https://github.com/cardwizard/EllipticCurves/",
                 "credit2":"https://github.com/yinengy/Mersenne-Twister-in-Python",
                 "credit3":""}
+
+###############################################################################
+#                             Core Imports
+###############################################################################
 import math
 import time
 import numpy
 import hashlib
 import secrets
 import numpy as np 
+from flask import Flask
 from binascii import hexlify
 from matplotlib import pyplot as plt 
+
+###############################################################################
+#                              Local Imports
+###############################################################################
 from src.util.stats.ProbabilityMassFunction import MassProbabilityFunction as mpf
 from src.util.Utils import errorprinter,GenPerpThreader
 from src.util.Utils import modulo_multiply,modulo_pow
 from src.primitives.EllipticalCurve import EllipticalCurve,Point
 from src.util.stats.Entropy import Entropy
 
+
+###############################################################################
+#                      Flask Server / Flask Routes
+###############################################################################
+import os
+import flask
+import pickle
+import numpy as np 
+import pandas as pd 
+from flask import Flask, render_template, request
+from wtforms import Form, TextAreaField, validators
+
+app = Flask(__name__)
+
+class HelloForm(Form):
+	sayhello = TextAreaField('',[validators.DataRequired()])
+
+class JupyterServer():
+    '''Handler for Jupyter Notebooks to render them in the browser dynamically'''
+    def __init__(self,filetoserve:str)->None:
+        notebookconfig = '''
+c.NotebookApp.allow_origin = '*' #Basic permission
+c.NotebookApp.disable_check_xsrf = True #Otherwise Jupyter restricts you modifying the Iframed Notebook
+c.NotebookApp.ip = 'ENTER_YOUR_JUPYTER_IP_ADDRESS' #Appears in the top browser bar when you launch jupyter
+c.NotebookApp.port = 8888 #Your choice of port
+c.NotebookApp.token = '' #In my case I didn't want to deal with security
+c.NotebookApp.trust_xheaders = True #May or may not make a difference to you
+
+c.NotebookApp.tornado_settings = {
+'headers': {
+'Content-Security-Policy': "frame-ancestors 'http://127.0.0.1:5000/' 'self' "
+}
+} #assuming your Flask localhost is 127.0.0.1:5000'''
+    iframehtml = '''<iframe width="1000" height="1000"  src="http://ENTER_YOUR_JUPYTER_IP_ADDRESS:8888/notebooks/Desktop/test.ipynb"/>'''
+
+class FlaskServer():
+    '''Starts a flask server for a web interface'''
+    def __init__(self,appname:str):
+
+        app = Flask(appname)
+        #self.runapp()
+
+        @app.route("/stats")
+        def encryption(self):
+            return "Hello World!"
+
+        @app.route("/ellipticalcurveplot")
+        def plot(self):
+            return "Hello World!"
+
+        @app.route("/entropy")
+        def stats(self):
+            return "Hello World!"
+        
+        @app.route('/')
+        def index(self):
+            return flask.render_template('')
+
+        def loadpickle(self,filename):
+            loadedfile = pickle.load(open(filename,"r"))
+            #@app.route('/'+ filename,methods = ['POST'])
+
+        def writepickle(self,data):
+            pass
+
+        def output(self,filename):
+            '''This is the function that outputs data to the browser screen
+            feed it a filename'''
+            if request.method == 'POST':
+                app.render_template(filename+ '.html')
+        
+        def runapp(self)   :
+            app.run(debug=True)
+
+###############################################################################
+#                       Plotting Elliptical Curves
+###############################################################################
 class PlotCurve():
     '''Plots an EllipticalCurve() with pyplot
 >>> curve = EllipticalCurve(FieldSizeK:int ,a:int, b:int)'''
@@ -67,6 +153,9 @@ class PlotCurve():
         plt.plot(self.x,self.y) 
         plt.show()
 
+###############################################################################
+#                            Testing / Statistics
+###############################################################################
 class Test():
     def __init__(self):
         self.poolsize = 32 # numbers
@@ -93,27 +182,6 @@ class Test():
             self.poolofsha256randos.append(herp.digest())
         return self.poolofsha256randos
     
-    def uniformity(self, x):
-        '''Will return a number describing the uniformity of the data fed to it
-    Accepts arrays of integers/floats'''
-        return lambda x : 1 - 0.5*sum( abs(x - numpy.average(x)) )/(len(x)*numpy.average(x))
-    
-    def check_uniformity(self,setofprn):
-        '''In statistics, the bias (or bias function) of an estimator is the 
-    difference between this estimator's expected value and the true value of the
-    parameter being estimated. An estimator or decision rule with zero bias is 
-    called unbiased. In statistics, "bias" is an objective property of an estimator.
-    Bias can also be measured with respect to the median, rather than the mean 
-    (expected value), in which case one distinguishes median-unbiased from the 
-    usual mean-unbiasedness property.'''
-        uniformityarray = []
-        for csprn in setofprn:
-            # comparing csprn from pool to csprn after uniformity c
-            #we have to compare each number for the distance between the values
-            # we save the value representing the distance between the  two
-            # in its own array and average those into one number, representing 
-            # the bias, we want numbers close to 0?
-            uniformityarray.append(self.uniformity(csprn))
 
     def TestEC(self)->None:
         e = EllipticalCurve(7, 3, 37)
