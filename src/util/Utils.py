@@ -248,6 +248,28 @@ def tcpsocket():
                     break
             conn.sendall(data)
 
+
+def randombytes(bytesize):
+    return secrets.token_bytes(bytesize)
+
+def randombytepool(poolsize,bytesize):
+    '''fills a pool with random bytes'''
+    randompool = []
+    for i in range(poolsize):
+        i=i
+        randompool.append(randombytes(bytesize))
+    return randompool
+
+def fillthepoolSHA256CounterMode(poolsize):
+    '''fills a pool with sha256 hashes from a counter run to lim(x)'''
+    poolofsha256randos = []
+    for i in range(poolsize):
+        herp = hashlib.sha256()
+        herp.update(i)
+        poolofsha256randos.append(herp.digest())
+    return poolofsha256randos
+    
+
 ################################################################################
 ##############                   CRYPTOGRAPHY                  #################
 ################################################################################

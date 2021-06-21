@@ -51,7 +51,7 @@ nonlinear functions, also called "perfect nonlinear" functions.[4]
 
 More precisely, the rate represents the 
     ratio between the number of processed bits of 
-        input m {\displaystyle m} m, 
+        input m  
         the output bit-length n of the block cipher, 
         and the necessary block cipher operations s to produce these n output bits. 
         
@@ -77,7 +77,9 @@ least the following conditions are met:
     internally in specialised hash functions like SHA-1 etc.
 
 '''
+import hashlib
 from src.util.Utils import errorprinter
+from src.tools.BlockChunker import Chunker
 
 class OneWayCompression():
     '''This is going to be a asfaghzdjh Function '''
@@ -93,6 +95,7 @@ class OneWayCompression():
                 self.inputlen1 = len(input1)
                 self.inputlen2 = len(input2)
                 self.outputsize = outputlength
+                self.chunker = Chunker()
         except Exception:
             errorprinter(Exception)
 
@@ -137,14 +140,6 @@ class OneWayCompression():
                 datafield.append(bytefield1)
         return datafield
 
-    def chunker(self, datainput:bytes , chunksize:int, slicestepsize:int)->bytes:
-        '''operates on a stream of input, chunking to specified bytelength
-    output.append([datainput[0:chunksize:slicestepsize]])'''
-        output = []
-        for lengthindex in range(chunksize):
-            lengthindex = lengthindex
-            output.append([datainput[0:chunksize:slicestepsize]])
-        return output
 
     def squish(self,bytefeed:bytes,chunksze:int,slicestep = 1):#, wordsize = 32 ):
         '''feedandseed:bytes should be a stream of random bytes'''
@@ -152,16 +147,20 @@ class OneWayCompression():
         split2 = []
         counter1 = 0
         counter2 = 0
+        pipeline1injection = ""
         #split the input streams into chunks and prepare to funnel to operations
         for thing1,thing2 in bytefeed,bytefeed:
-            split1.append(self.chunker(thing1,chunksze,slicestep))
+            split1.append(self.chunker.chunker(thing1,chunksze,slicestep))
             counter1 = counter1 + 1
-            split2.append(self.chunker(thing2,chunksze,slicestep))
+            split2.append(self.chunker.chunker(thing2,chunksze,slicestep))
             counter2 = counter2 +1
         #######################################################################
         # Pipeline 1, left side
         for each in split1:
-            pass
+            # feed the x-bit wide chunk of random data 
+            # with (insert selected data here) TO BE DECIDED
+            randomnesextract1 = self.extractor(each,pipeline1injection)
+            hashedextract = hashlib.sha256(randomnesextract1)
         
         #######################################################################
         # Pipeline2, right side

@@ -144,10 +144,10 @@ class AES(object):
         rounds = self.number_of_rounds[len(key)]
 
         # Encryption round keys
-        self._Ke = [[0] * 4 for i in xrange(rounds + 1)]
+        self.KeyEncRound = [[0] * 4 for i in xrange(rounds + 1)]
 
         # Decryption round keys
-        self._Kd = [[0] * 4 for i in xrange(rounds + 1)]
+        self.KeyDecRound = [[0] * 4 for i in xrange(rounds + 1)]
 
         round_key_count = (rounds + 1) * 4
         KC = len(key) // 4
@@ -157,8 +157,8 @@ class AES(object):
 
         # Copy values into round key arrays
         for i in xrange(0, KC):
-            self._Ke[i // 4][i % 4] = tk[i]
-            self._Kd[rounds - (i // 4)][i % 4] = tk[i]
+            self.KeyEncRound[i // 4][i % 4] = tk[i]
+            self.KeyDecRound[rounds - (i // 4)][i % 4] = tk[i]
 
         # Key expansion (fips-197 section 5.2)
         rconpointer = 0
@@ -194,16 +194,16 @@ class AES(object):
             # Copy values into round key arrays
             j = 0
             while j < KC and t < round_key_count:
-                self._Ke[t // 4][t % 4] = tk[j]
-                self._Kd[rounds - (t // 4)][t % 4] = tk[j]
+                self.KeyEncRound[t // 4][t % 4] = tk[j]
+                self.KeyDecRound[rounds - (t // 4)][t % 4] = tk[j]
                 j += 1
                 t += 1
 
         # Inverse-Cipher-ify the decryption round key (fips-197 section 5.3)
         for r in xrange(1, rounds):
             for j in xrange(0, 4):
-                tt = self._Kd[r][j]
-                self._Kd[r][j] = (self.U1[(tt >> 24) & 0xFF] ^
+                tt = self.KeyDecRound[r][j]
+                self.KeyDecRound[r][j] = (self.U1[(tt >> 24) & 0xFF] ^
                                   self.U2[(tt >> 16) & 0xFF] ^
                                   self.U3[(tt >>  8) & 0xFF] ^
                                   self.U4[ tt        & 0xFF])
@@ -214,12 +214,12 @@ class AES(object):
         if len(plaintext) != 16:
             raise ValueError('wrong block length')
 
-        rounds = len(self._Ke) - 1
+        rounds = len(self.KeyEncRound) - 1
         (s1, s2, s3) = [1, 2, 3]
         a = [0, 0, 0, 0]
 
         # Convert plaintext to (ints ^ key)
-        t = [(_compact_word(plaintext[4 * i:4 * i + 4]) ^ self._Ke[0][i]) for i in xrange(0, 4)]
+        t = [(_compact_word(plaintext[4 * i:4 * i + 4]) ^ self.KeyEncRound[0][i]) for i in xrange(0, 4)]
 
         # Apply round transforms
         for r in xrange(1, rounds):
@@ -228,13 +228,13 @@ class AES(object):
                         self.T2[(t[(i + s1) % 4] >> 16) & 0xFF] ^
                         self.T3[(t[(i + s2) % 4] >>  8) & 0xFF] ^
                         self.T4[ t[(i + s3) % 4]        & 0xFF] ^
-                        self._Ke[r][i])
+                        self.KeyEncRound[r][i])
             t = copy.copy(a)
 
         # The last round is special
         result = [ ]
         for i in xrange(0, 4):
-            tt = self._Ke[rounds][i]
+            tt = self.KeyEncRound[rounds][i]
             result.append((self.S[(t[ i           ] >> 24) & 0xFF] ^ (tt >> 24)) & 0xFF)
             result.append((self.S[(t[(i + s1) % 4] >> 16) & 0xFF] ^ (tt >> 16)) & 0xFF)
             result.append((self.S[(t[(i + s2) % 4] >>  8) & 0xFF] ^ (tt >>  8)) & 0xFF)
@@ -248,12 +248,12 @@ class AES(object):
         if len(ciphertext) != 16:
             raise ValueError('wrong block length')
 
-        rounds = len(self._Kd) - 1
+        rounds = len(self.KeyDecRound) - 1
         (s1, s2, s3) = [3, 2, 1]
         a = [0, 0, 0, 0]
 
         # Convert ciphertext to (ints ^ key)
-        t = [(_compact_word(ciphertext[4 * i:4 * i + 4]) ^ self._Kd[0][i]) for i in xrange(0, 4)]
+        t = [(_compact_word(ciphertext[4 * i:4 * i + 4]) ^ self.KeyDecRound[0][i]) for i in xrange(0, 4)]
 
         # Apply round transforms
         for r in xrange(1, rounds):
@@ -262,13 +262,13 @@ class AES(object):
                         self.T6[(t[(i + s1) % 4] >> 16) & 0xFF] ^
                         self.T7[(t[(i + s2) % 4] >>  8) & 0xFF] ^
                         self.T8[ t[(i + s3) % 4]        & 0xFF] ^
-                        self._Kd[r][i])
+                        self.KeyDecRound[r][i])
             t = copy.copy(a)
 
         # The last round is special
         result = [ ]
         for i in xrange(0, 4):
-            tt = self._Kd[rounds][i]
+            tt = self.KeyDecRound[rounds][i]
             result.append((self.Si[(t[ i           ] >> 24) & 0xFF] ^ (tt >> 24)) & 0xFF)
             result.append((self.Si[(t[(i + s1) % 4] >> 16) & 0xFF] ^ (tt >> 16)) & 0xFF)
             result.append((self.Si[(t[(i + s2) % 4] >>  8) & 0xFF] ^ (tt >>  8)) & 0xFF)
