@@ -26,10 +26,10 @@ __credits__ = {"credit1":"mister-hai",
 #                             Core Imports
 ###############################################################################
 import os,sys
-from app.FlaskServer import FlaskServer
 from flask_wtf.csrf import CSRFProtect
 
 from app.test import Test
+from app.FlaskServer import FlaskServer
 from app.JupyterServer import JupyterServer
 from app.src.util.Utils import greenprint,redprint,blueprint,errorprinter
 from app.src.primitives.EllipticalCurve import EllipticalCurve,Point
