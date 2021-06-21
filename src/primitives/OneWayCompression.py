@@ -144,11 +144,10 @@ class OneWayCompression():
         for lengthindex in range(chunksize):
             lengthindex = lengthindex
             output.append([datainput[0:chunksize:slicestepsize]])
-        pass
+        return output
 
-    def squish(self,key:bytes,seed:bytes,bytefeed:bytes,chunksize:int,slicestepsize = 1 ):
-        '''feedandseed:bytes should be a stream of random bytes, 
-        it will be chunked, you do not need to chunk it yourself'''
+    def squish(self,bytefeed:bytes,chunksize:int,slicestepsize = 1):#, wordsize = 32 ):
+        '''feedandseed:bytes should be a stream of random bytes'''
         split1 = []
         split2 = []
         counter1 = 0
@@ -166,6 +165,8 @@ class OneWayCompression():
         
         #######################################################################
         # Pipeline2, right side
+        # try #1 :
+        # I will operate on right pipe with seed
         for each in split2:
             pass
 

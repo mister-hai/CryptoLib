@@ -17,7 +17,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 ################################################################################
-__docs__ = '''Von Neuman Extractor
+__docs__ = '''Randomness Extractor
  
     can be shown to produce a uniform output even if the distribution 
     of input bits is not uniform so long as:
@@ -29,6 +29,9 @@ From Wikipedia:
    (first and second, then third and fourth, and so on). 
    If the two bits matched, no output was generated. 
    If the bits differed, the value of the first bit was output. 
+
+An extractor is strong if concatenating the seed with the extractor's output 
+yields a distribution that is still close to uniform. 
 '''
 
 def VonNeumanExtractor(data1,data2):

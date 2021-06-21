@@ -58,6 +58,28 @@ However, given only one of these two keys,
 the values of f 
 
 for that key should be indistinguishable from random. 
+
+In the other direction, if a distributed point function is known, then it is 
+possible to perform private information retrieval. As a simplified example of 
+this, it is possible to test whether a key a {\displaystyle a} a belongs to 
+replicated distributed database without revealing to the database servers 
+(unless they collude with each other) which key was sought. 
+
+To find the key a in the database, 
+create a distributed point function 
+
+    for Pa,1(x) 
+
+and send the resulting two keys q and r 
+
+to two different servers holding copies of the database. 
+
+    Each copy applies its function fq or fr
+
+to all the keys in its copy of the database, 
+and returns the exclusive or of the results.
+The two returned values will differ if a {\displaystyle a} a belongs to the
+ database, and will be equal otherwise. 
 '''
 __url__ = '''https://en.wikipedia.org/wiki/Distributed_point_function'''
 __docs__ = '''

@@ -126,7 +126,49 @@ USE CURVE25519!!!
     — Bruce Schneier, The NSA Is Breaking Most Encryption on the Internet (2013)[16]
 
 '''
+__domainparams__ = '''
+To use ECC, all parties must agree on all the elements defining the elliptic
+curve, that is, the domain parameters of the scheme. 
 
+The size of the field used is 
+
+    typically either prime (and denoted as p)
+
+    or is a power of two 2^m
+
+the latter case is called the binary case, and also necessitates the choice of an 
+
+    auxiliary curve denoted by f. 
+
+Thus the field is defined by 
+    
+    p in the prime case 
+    
+    and the pair of m and f in the binary case.
+
+The elliptic curve is defined by 
+    the constants a and b used in its defining equation. 
+
+Finally, the cyclic subgroup is defined by 
+    its generator (a.k.a. base point) G. 
+
+For cryptographic application the order of G, 
+    that is the smallest positive number n 
+    such that n G = O 
+
+the point at infinity of the curve, and the identity element), 
+is normally prime. 
+    Since n is the size of a subgroup of E ( F p ) 
+    it follows from Lagrange's theorem that the number h= 1/n * |E(Fp)| 
+
+is an integer. 
+In cryptographic applications this number h, 
+called the cofactor, must be small ( h ≤ 4 {\displaystyle h\leq 4} h\leq 4) 
+and, preferably, h = 1 {\displaystyle h=1} h=1. 
+
+To summarize: in the prime case, the domain parameters are ( p , a , b , G , n , h ) 
+ in the binary case, they are ( m , f , a , b , G , n , h )
+'''
 
 import math
 import numpy
